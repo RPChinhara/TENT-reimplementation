@@ -210,3 +210,4 @@ data/*
 
 *.pt
 *.pth
+.codex

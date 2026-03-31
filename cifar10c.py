@@ -3,121 +3,155 @@ import logging
 import torch
 import torch.optim as optim
 
-from robustbench.data import load_cifar10c
-from robustbench.model_zoo.enums import ThreatModel
-from robustbench.utils import load_model
-from robustbench.utils import clean_accuracy as accuracy
-
-import tent
 import norm
-from functools import partial
-torch.load = partial(torch.load, weights_only=False)
-
+import tent
 from conf import cfg, load_cfg_fom_args
+from data_utils import build_cifar10_dataloaders, build_cifar10c_loader
+from model_utils import build_model, load_checkpoint, resolve_device
 
 
 logger = logging.getLogger(__name__)
 
 
+def load_base_model(device):
+    model = build_model(cfg.MODEL.ARCH, num_classes=cfg.MODEL.NUM_CLASSES)
+    checkpoint = load_checkpoint(model, cfg.MODEL.CKPT_PATH, map_location="cpu")
+    model.to(device)
+
+    logger.info("loaded checkpoint: %s", cfg.MODEL.CKPT_PATH)
+    if checkpoint:
+        logger.info(
+            "checkpoint metadata: epoch=%s, best_acc=%s",
+            checkpoint.get("epoch"),
+            checkpoint.get("best_acc"),
+        )
+    return model
+
+
+def evaluate_loader(model, loader, device):
+    correct = 0
+    total = 0
+
+    with torch.no_grad():
+        for inputs, targets in loader:
+            inputs = inputs.to(device, non_blocking=True)
+            targets = targets.to(device, non_blocking=True)
+            outputs = model(inputs)
+            predictions = outputs.argmax(dim=1)
+            correct += (predictions == targets).sum().item()
+            total += targets.size(0)
+
+    return correct / max(total, 1)
+
+
+def maybe_reset(model):
+    try:
+        model.reset()
+        logger.info("resetting model")
+    except Exception:
+        logger.info("model does not require reset")
+
+
 def evaluate(description):
     load_cfg_fom_args(description)
-    # configure model
-    base_model = load_model(cfg.MODEL.ARCH, cfg.CKPT_DIR,
-                       cfg.CORRUPTION.DATASET, ThreatModel.corruptions).cuda()
+    device = resolve_device(cfg.DEVICE)
+    logger.info("using device: %s", device)
+
+    base_model = load_base_model(device)
     if cfg.MODEL.ADAPTATION == "source":
         logger.info("test-time adaptation: NONE")
         model = setup_source(base_model)
-    if cfg.MODEL.ADAPTATION == "norm":
+    elif cfg.MODEL.ADAPTATION == "norm":
         logger.info("test-time adaptation: NORM")
         model = setup_norm(base_model)
-    if cfg.MODEL.ADAPTATION == "tent":
+    elif cfg.MODEL.ADAPTATION == "tent":
         logger.info("test-time adaptation: TENT")
         model = setup_tent(base_model)
-    # evaluate on each severity and type of corruption in turn
+    else:
+        raise NotImplementedError(f"Unknown adaptation mode: {cfg.MODEL.ADAPTATION}")
+
+    if cfg.TEST.EVAL_CLEAN:
+        _, clean_loader = build_cifar10_dataloaders(
+            data_dir=cfg.DATA_DIR,
+            batch_size=cfg.TEST.BATCH_SIZE,
+            eval_batch_size=cfg.TEST.BATCH_SIZE,
+            num_workers=cfg.TEST.NUM_WORKERS,
+            download=False,
+        )
+        maybe_reset(model)
+        clean_acc = evaluate_loader(model, clean_loader, device)
+        logger.info("clean error %% [cifar10]: %.2f%%", (1.0 - clean_acc) * 100.0)
+
     for severity in cfg.CORRUPTION.SEVERITY:
         for corruption_type in cfg.CORRUPTION.TYPE:
-            # reset adaptation for each combination of corruption x severity
-            # note: for evaluation protocol, but not necessarily needed
-            try:
-                model.reset()
-                logger.info("resetting model")
-            except:
-                logger.warning("not resetting model")
-            x_test, y_test = load_cifar10c(cfg.CORRUPTION.NUM_EX,
-                                           severity, cfg.DATA_DIR, False,
-                                           [corruption_type])
-            x_test, y_test = x_test.cuda(), y_test.cuda()
-            acc = accuracy(model, x_test, y_test, cfg.TEST.BATCH_SIZE)
-            err = 1. - acc
-            logger.info(f"error % [{corruption_type}{severity}]: {err:.2%}")
+            maybe_reset(model)
+            loader = build_cifar10c_loader(
+                corruption=corruption_type,
+                severity=severity,
+                data_dir=cfg.DATA_DIR,
+                batch_size=cfg.TEST.BATCH_SIZE,
+                num_examples=cfg.CORRUPTION.NUM_EX,
+                num_workers=cfg.TEST.NUM_WORKERS,
+            )
+            acc = evaluate_loader(model, loader, device)
+            err = 1.0 - acc
+            logger.info("error %% [%s%d]: %.2f%%", corruption_type, severity, err * 100.0)
 
 
 def setup_source(model):
     """Set up the baseline source model without adaptation."""
     model.eval()
-    logger.info(f"model for evaluation: %s", model)
+    logger.info("model for evaluation: %s", model.__class__.__name__)
     return model
 
 
 def setup_norm(model):
-    """Set up test-time normalization adaptation.
-
-    Adapt by normalizing features with test batch statistics.
-    The statistics are measured independently for each batch;
-    no running average or other cross-batch estimation is used.
-    """
-    norm_model = norm.Norm(model)
-    logger.info(f"model for adaptation: %s", model)
-    stats, stat_names = norm.collect_stats(model)
-    logger.info(f"stats for adaptation: %s", stat_names)
+    """Set up test-time normalization adaptation."""
+    norm_model = norm.Norm(model, eps=cfg.BN.EPS, momentum=cfg.BN.MOM)
+    _, stat_names = norm.collect_stats(norm_model.model)
+    logger.info("model for adaptation: %s", model.__class__.__name__)
+    logger.info("stats for adaptation: %s", stat_names)
     return norm_model
 
 
 def setup_tent(model):
-    """Set up tent adaptation.
-
-    Configure the model for training + feature modulation by batch statistics,
-    collect the parameters for feature modulation by gradient optimization,
-    set up the optimizer, and then tent the model.
-    """
+    """Set up tent adaptation."""
     model = tent.configure_model(model)
+    tent.check_model(model)
     params, param_names = tent.collect_params(model)
     optimizer = setup_optimizer(params)
-    tent_model = tent.Tent(model, optimizer,
-                           steps=cfg.OPTIM.STEPS,
-                           episodic=cfg.MODEL.EPISODIC)
-    logger.info(f"model for adaptation: %s", model)
-    logger.info(f"params for adaptation: %s", param_names)
-    logger.info(f"optimizer for adaptation: %s", optimizer)
+    tent_model = tent.Tent(
+        model,
+        optimizer,
+        steps=cfg.OPTIM.STEPS,
+        episodic=cfg.MODEL.EPISODIC,
+    )
+    logger.info("model for adaptation: %s", model.__class__.__name__)
+    logger.info("params for adaptation: %s", param_names)
+    logger.info("optimizer for adaptation: %s", optimizer)
     return tent_model
 
 
 def setup_optimizer(params):
-    """Set up optimizer for tent adaptation.
-
-    Tent needs an optimizer for test-time entropy minimization.
-    In principle, tent could make use of any gradient optimizer.
-    In practice, we advise choosing Adam or SGD+momentum.
-    For optimization settings, we advise to use the settings from the end of
-    trainig, if known, or start with a low learning rate (like 0.001) if not.
-
-    For best results, try tuning the learning rate and batch size.
-    """
-    if cfg.OPTIM.METHOD == 'Adam':
-        return optim.Adam(params,
-                    lr=cfg.OPTIM.LR,
-                    betas=(cfg.OPTIM.BETA, 0.999),
-                    weight_decay=cfg.OPTIM.WD)
-    elif cfg.OPTIM.METHOD == 'SGD':
-        return optim.SGD(params,
-                   lr=cfg.OPTIM.LR,
-                   momentum=cfg.OPTIM.MOMENTUM,
-                   dampening=cfg.OPTIM.DAMPENING,
-                   weight_decay=cfg.OPTIM.WD,
-                   nesterov=cfg.OPTIM.NESTEROV)
-    else:
-        raise NotImplementedError
+    """Set up optimizer for tent adaptation."""
+    if cfg.OPTIM.METHOD == "Adam":
+        return optim.Adam(
+            params,
+            lr=cfg.OPTIM.LR,
+            betas=(cfg.OPTIM.BETA, 0.999),
+            weight_decay=cfg.OPTIM.WD,
+        )
+    if cfg.OPTIM.METHOD == "SGD":
+        return optim.SGD(
+            params,
+            lr=cfg.OPTIM.LR,
+            momentum=cfg.OPTIM.MOMENTUM,
+            dampening=cfg.OPTIM.DAMPENING,
+            weight_decay=cfg.OPTIM.WD,
+            nesterov=cfg.OPTIM.NESTEROV,
+        )
+    raise NotImplementedError(f"Unsupported optimizer: {cfg.OPTIM.METHOD}")
 
 
-if __name__ == '__main__':
-    evaluate('"CIFAR-10-C evaluation.')
+if __name__ == "__main__":
+    evaluate("CIFAR-10-C evaluation.")

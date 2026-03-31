@@ -25,8 +25,14 @@ cfg = _C
 # ----------------------------- Model options ------------------------------- #
 _C.MODEL = CfgNode()
 
-# Check https://github.com/RobustBench/robustbench for available models
-_C.MODEL.ARCH = 'Standard'
+# Local architecture name
+_C.MODEL.ARCH = 'resnet26'
+
+# Local checkpoint path used for evaluation
+_C.MODEL.CKPT_PATH = './ckpt/cifar10/resnet26_best.pth'
+
+# Number of output classes
+_C.MODEL.NUM_CLASSES = 10
 
 # Choice of (source, norm, tent)
 # - source: baseline without adaptation
@@ -96,6 +102,12 @@ _C.TEST = CfgNode()
 # Batch size for evaluation (and updates for norm + tent)
 _C.TEST.BATCH_SIZE = 128
 
+# DataLoader workers for clean and corrupted evaluation
+_C.TEST.NUM_WORKERS = 2
+
+# Evaluate clean CIFAR-10 before CIFAR-10-C corruptions
+_C.TEST.EVAL_CLEAN = True
+
 # --------------------------------- CUDNN options --------------------------- #
 _C.CUDNN = CfgNode()
 
@@ -109,6 +121,9 @@ _C.DESC = ""
 
 # Note that non-determinism is still present due to non-deterministic GPU ops
 _C.RNG_SEED = 1
+
+# Device: auto, cpu, cuda
+_C.DEVICE = 'auto'
 
 # Output directory
 _C.SAVE_DIR = "./output"

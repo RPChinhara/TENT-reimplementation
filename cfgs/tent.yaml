@@ -1,8 +1,10 @@
 MODEL:
   ADAPTATION: tent
-  ARCH: Standard
+  ARCH: resnet26
+  CKPT_PATH: ./ckpt/cifar10/resnet26_best.pth
 TEST:
   BATCH_SIZE: 200
+  NUM_WORKERS: 2
 CORRUPTION:
   DATASET: cifar10
   SEVERITY:

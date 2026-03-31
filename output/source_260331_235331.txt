@@ -1,0 +1,195 @@
+[26/03/31 23:53:31] [conf.py:  223]: PyTorch Version: torch=2.5.1, cuda=11.8, cudnn=90100
+[26/03/31 23:53:31] [conf.py:  225]: BN:
+  EPS: 1e-05
+  MOM: 0.1
+CKPT_DIR: ./ckpt
+CORRUPTION:
+  DATASET: cifar10
+  NUM_EX: 10000
+  SEVERITY: [5, 4, 3, 2, 1]
+  TYPE: ['gaussian_noise', 'shot_noise', 'impulse_noise', 'defocus_blur', 'glass_blur', 'motion_blur', 'zoom_blur', 'snow', 'frost', 'fog', 'brightness', 'contrast', 'elastic_transform', 'pixelate', 'jpeg_compression']
+CUDNN:
+  BENCHMARK: True
+DATA_DIR: ./data
+DESC: 
+DEVICE: auto
+LOG_DEST: source_260331_235331.txt
+LOG_TIME: 260331_235331
+MODEL:
+  ADAPTATION: source
+  ARCH: resnet26
+  CKPT_PATH: ./ckpt/cifar10/resnet26_best.pth
+  EPISODIC: False
+  NUM_CLASSES: 10
+OPTIM:
+  BETA: 0.9
+  DAMPENING: 0.0
+  LR: 0.001
+  METHOD: Adam
+  MOMENTUM: 0.9
+  NESTEROV: True
+  STEPS: 1
+  WD: 0.0
+RNG_SEED: 1
+SAVE_DIR: ./output
+TEST:
+  BATCH_SIZE: 200
+  EVAL_CLEAN: True
+  NUM_WORKERS: 2
+[26/03/31 23:53:31] [cifar10c.py:   58]: using device: cuda
+[26/03/31 23:53:32] [cifar10c.py:   21]: loaded checkpoint: ./ckpt/cifar10/resnet26_best.pth
+[26/03/31 23:53:32] [cifar10c.py:   23]: checkpoint metadata: epoch=191, best_acc=0.9342
+[26/03/31 23:53:32] [cifar10c.py:   62]: test-time adaptation: NONE
+[26/03/31 23:53:32] [cifar10c.py:  104]: model for evaluation: CifarResNet
+[26/03/31 23:53:32] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:33] [cifar10c.py:   83]: clean error % [cifar10]: 6.59%
+[26/03/31 23:53:33] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:34] [cifar10c.py:   98]: error % [gaussian_noise5]: 72.83%
+[26/03/31 23:53:34] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:34] [cifar10c.py:   98]: error % [shot_noise5]: 67.40%
+[26/03/31 23:53:34] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:35] [cifar10c.py:   98]: error % [impulse_noise5]: 71.94%
+[26/03/31 23:53:35] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:36] [cifar10c.py:   98]: error % [defocus_blur5]: 46.00%
+[26/03/31 23:53:36] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:36] [cifar10c.py:   98]: error % [glass_blur5]: 54.84%
+[26/03/31 23:53:36] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:37] [cifar10c.py:   98]: error % [motion_blur5]: 39.27%
+[26/03/31 23:53:37] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:37] [cifar10c.py:   98]: error % [zoom_blur5]: 42.12%
+[26/03/31 23:53:37] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:38] [cifar10c.py:   98]: error % [snow5]: 28.27%
+[26/03/31 23:53:38] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:39] [cifar10c.py:   98]: error % [frost5]: 41.64%
+[26/03/31 23:53:39] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:39] [cifar10c.py:   98]: error % [fog5]: 32.79%
+[26/03/31 23:53:39] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:40] [cifar10c.py:   98]: error % [brightness5]: 10.98%
+[26/03/31 23:53:40] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:41] [cifar10c.py:   98]: error % [contrast5]: 69.02%
+[26/03/31 23:53:41] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:41] [cifar10c.py:   98]: error % [elastic_transform5]: 29.02%
+[26/03/31 23:53:41] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:42] [cifar10c.py:   98]: error % [pixelate5]: 61.97%
+[26/03/31 23:53:42] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:43] [cifar10c.py:   98]: error % [jpeg_compression5]: 30.32%
+[26/03/31 23:53:43] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:43] [cifar10c.py:   98]: error % [gaussian_noise4]: 69.36%
+[26/03/31 23:53:43] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:44] [cifar10c.py:   98]: error % [shot_noise4]: 58.17%
+[26/03/31 23:53:44] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:45] [cifar10c.py:   98]: error % [impulse_noise4]: 56.00%
+[26/03/31 23:53:45] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:45] [cifar10c.py:   98]: error % [defocus_blur4]: 24.22%
+[26/03/31 23:53:45] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:46] [cifar10c.py:   98]: error % [glass_blur4]: 56.58%
+[26/03/31 23:53:46] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:46] [cifar10c.py:   98]: error % [motion_blur4]: 29.85%
+[26/03/31 23:53:46] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:47] [cifar10c.py:   98]: error % [zoom_blur4]: 31.43%
+[26/03/31 23:53:47] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:48] [cifar10c.py:   98]: error % [snow4]: 22.97%
+[26/03/31 23:53:48] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:48] [cifar10c.py:   98]: error % [frost4]: 30.22%
+[26/03/31 23:53:48] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:49] [cifar10c.py:   98]: error % [fog4]: 14.09%
+[26/03/31 23:53:49] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:50] [cifar10c.py:   98]: error % [brightness4]: 8.63%
+[26/03/31 23:53:50] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:50] [cifar10c.py:   98]: error % [contrast4]: 26.07%
+[26/03/31 23:53:50] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:51] [cifar10c.py:   98]: error % [elastic_transform4]: 23.91%
+[26/03/31 23:53:51] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:52] [cifar10c.py:   98]: error % [pixelate4]: 43.33%
+[26/03/31 23:53:52] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:52] [cifar10c.py:   98]: error % [jpeg_compression4]: 25.95%
+[26/03/31 23:53:52] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:53] [cifar10c.py:   98]: error % [gaussian_noise3]: 63.58%
+[26/03/31 23:53:53] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:53] [cifar10c.py:   98]: error % [shot_noise3]: 51.29%
+[26/03/31 23:53:53] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:54] [cifar10c.py:   98]: error % [impulse_noise3]: 37.99%
+[26/03/31 23:53:54] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:55] [cifar10c.py:   98]: error % [defocus_blur3]: 14.53%
+[26/03/31 23:53:55] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:55] [cifar10c.py:   98]: error % [glass_blur3]: 44.55%
+[26/03/31 23:53:55] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:56] [cifar10c.py:   98]: error % [motion_blur3]: 29.89%
+[26/03/31 23:53:56] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:57] [cifar10c.py:   98]: error % [zoom_blur3]: 25.35%
+[26/03/31 23:53:57] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:57] [cifar10c.py:   98]: error % [snow3]: 19.77%
+[26/03/31 23:53:57] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:58] [cifar10c.py:   98]: error % [frost3]: 27.87%
+[26/03/31 23:53:58] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:59] [cifar10c.py:   98]: error % [fog3]: 10.34%
+[26/03/31 23:53:59] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:53:59] [cifar10c.py:   98]: error % [brightness3]: 7.80%
+[26/03/31 23:53:59] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:00] [cifar10c.py:   98]: error % [contrast3]: 15.38%
+[26/03/31 23:54:00] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:00] [cifar10c.py:   98]: error % [elastic_transform3]: 17.00%
+[26/03/31 23:54:00] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:01] [cifar10c.py:   98]: error % [pixelate3]: 22.17%
+[26/03/31 23:54:01] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:02] [cifar10c.py:   98]: error % [jpeg_compression3]: 23.12%
+[26/03/31 23:54:02] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:02] [cifar10c.py:   98]: error % [gaussian_noise2]: 47.63%
+[26/03/31 23:54:02] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:03] [cifar10c.py:   98]: error % [shot_noise2]: 28.89%
+[26/03/31 23:54:03] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:04] [cifar10c.py:   98]: error % [impulse_noise2]: 29.70%
+[26/03/31 23:54:04] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:04] [cifar10c.py:   98]: error % [defocus_blur2]: 8.60%
+[26/03/31 23:54:04] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:05] [cifar10c.py:   98]: error % [glass_blur2]: 46.00%
+[26/03/31 23:54:05] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:06] [cifar10c.py:   98]: error % [motion_blur2]: 20.41%
+[26/03/31 23:54:06] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:06] [cifar10c.py:   98]: error % [zoom_blur2]: 18.63%
+[26/03/31 23:54:06] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:07] [cifar10c.py:   98]: error % [snow2]: 22.72%
+[26/03/31 23:54:07] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:08] [cifar10c.py:   98]: error % [frost2]: 18.16%
+[26/03/31 23:54:08] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:08] [cifar10c.py:   98]: error % [fog2]: 7.86%
+[26/03/31 23:54:08] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:09] [cifar10c.py:   98]: error % [brightness2]: 7.14%
+[26/03/31 23:54:09] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:09] [cifar10c.py:   98]: error % [contrast2]: 11.25%
+[26/03/31 23:54:09] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:10] [cifar10c.py:   98]: error % [elastic_transform2]: 12.67%
+[26/03/31 23:54:10] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:11] [cifar10c.py:   98]: error % [pixelate2]: 15.91%
+[26/03/31 23:54:11] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:11] [cifar10c.py:   98]: error % [jpeg_compression2]: 21.30%
+[26/03/31 23:54:11] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:12] [cifar10c.py:   98]: error % [gaussian_noise1]: 27.05%
+[26/03/31 23:54:12] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:13] [cifar10c.py:   98]: error % [shot_noise1]: 18.20%
+[26/03/31 23:54:13] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:13] [cifar10c.py:   98]: error % [impulse_noise1]: 18.12%
+[26/03/31 23:54:13] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:14] [cifar10c.py:   98]: error % [defocus_blur1]: 6.86%
+[26/03/31 23:54:14] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:15] [cifar10c.py:   98]: error % [glass_blur1]: 47.59%
+[26/03/31 23:54:15] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:15] [cifar10c.py:   98]: error % [motion_blur1]: 12.04%
+[26/03/31 23:54:15] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:16] [cifar10c.py:   98]: error % [zoom_blur1]: 14.88%
+[26/03/31 23:54:16] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:17] [cifar10c.py:   98]: error % [snow1]: 12.46%
+[26/03/31 23:54:17] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:17] [cifar10c.py:   98]: error % [frost1]: 11.76%
+[26/03/31 23:54:17] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:18] [cifar10c.py:   98]: error % [fog1]: 7.09%
+[26/03/31 23:54:18] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:18] [cifar10c.py:   98]: error % [brightness1]: 6.76%
+[26/03/31 23:54:18] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:19] [cifar10c.py:   98]: error % [contrast1]: 7.23%
+[26/03/31 23:54:19] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:20] [cifar10c.py:   98]: error % [elastic_transform1]: 12.66%
+[26/03/31 23:54:20] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:20] [cifar10c.py:   98]: error % [pixelate1]: 9.80%
+[26/03/31 23:54:20] [cifar10c.py:   52]: model does not require reset
+[26/03/31 23:54:21] [cifar10c.py:   98]: error % [jpeg_compression1]: 15.72%

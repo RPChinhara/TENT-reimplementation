@@ -7,4 +7,3 @@ tqdm
 pandas
 requests
 matplotlib
-git+https://github.com/robustbench/robustbench
