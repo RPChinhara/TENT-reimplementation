@@ -103,20 +103,7 @@ Run it directly:
 ./run_full_pipeline.sh
 ```
 
-Run it in the background with `screen`:
-
-```bash
-screen -L -Logfile output/pipeline_screen.log -dmS tent_pipeline \
-  zsh -lc 'cd /path/to/repo/TENT-reimplementation && ./run_full_pipeline.sh'
-```
-
-Useful overrides:
-
-```bash
-EPOCHS=100 RESUME=0 ./run_full_pipeline.sh
-CKPT_PATH=./ckpt/cifar10/experiment_best.pth ./run_full_pipeline.sh
-TRAIN_WORKERS=8 EVAL_WORKERS=4 ./run_full_pipeline.sh
-```
+If the script is interrupted or fails, simply re-running it will resume from the last checkpoint and skip completed steps.
 
 ## Results
 
