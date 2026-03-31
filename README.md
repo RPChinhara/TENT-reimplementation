@@ -1,4 +1,4 @@
-# ⛺️ Tent: Fully Test-Time Adaptation by Entropy Minimization
+# Tent: Fully Test-Time Adaptation by Entropy Minimization
 
 This is a minimal reimplementation of the [Tent](https://openreview.net/forum?id=uXl3bZLkr3c) method for fully test-time adaptation by entropy minimization.
 
@@ -44,10 +44,9 @@ python cifar10c.py --cfg cfgs/tent.yaml
 python plots_tent.py
 ```
 
-**Result**: tent reduces the error (%) across corruption types at the most severe level of corruption (level 5).
+**Result**: TENT reduces the error (%) across corruption types at the most severe level of corruption (level 5).
 
-## Comparison of Results between Original and Reimplementation
-### Results from My Reimplementation
+## Results from My Reimplementation
 ![Severity 5 Plot](output/plots/1_severity5_bar.png)
 
 ![Severity Trend Plot](output/plots/2_severity_trend.png)
