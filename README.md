@@ -20,7 +20,7 @@ Python requirement:
 Create a conda environment and install dependencies:
 
 ```bash
-conda create --name tent python=3.9.25 -y
+conda create --name tent python=3.9 -y
 conda activate tent
 pip install -r requirements.txt
 ```
@@ -152,7 +152,7 @@ The original TENT paper reports the following CIFAR-10-C error rates for `ResNet
 | tent         | 18.6 |        24.8 |       23.5 |          33.0 |         12.0 |       31.8 |        13.7 |      10.8 | 15.9 |  16.2 | 13.7 |        7.9 |     12.1 |          22.0 |     17.3 | 24.2 |
 
 ### Reimplementation Results
-These are the values written by `results.csv` from the completed local run:
+These are the values written by `results.csv` from the completed local run using custom pre-trained `ResNet-26` on the same CIFAR-10/CIFAR-10-C dataset:
 
 |                                                            | mean  | gauss_noise | shot_noise | impulse_noise | defocus_blur | glass_blur | motion_blur | zoom_blur | snow | frost |  fog | brightness | contrast | elastic_trans | pixelate | jpeg |
 | ---------------------------------------------------------- | ----: | ----------: | ---------: | ------------: | -----------: | ---------: | ----------: | --------: | ---: | ----: | ---: | ---------: | -------: | ------------: | -------: | ---: |
