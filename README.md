@@ -12,9 +12,16 @@ This repository supports the full CIFAR-10 flow locally:
 
 ## Setup
 
-Use the existing `tent` conda environment for installs and runs:
+Python requirement:
+
+- Python `3.9`
+- Tested with Python `3.9.25`
+
+Create a conda environment and install dependencies:
 
 ```bash
+conda create --name tent python=3.9.25 -y
+conda activate tent
 pip install -r requirements.txt
 ```
 
