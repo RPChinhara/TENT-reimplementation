@@ -16,10 +16,6 @@
 #   TRAIN_WORKERS=4
 #   EVAL_WORKERS=2
 #   RESUME=1
-#
-# Example:
-#   screen -L -Logfile output/pipeline_screen.log -dmS tent_pipeline \
-#     zsh -lc 'cd /path/to/repo && ./run_full_pipeline.sh'
 
 set -euo pipefail
 
