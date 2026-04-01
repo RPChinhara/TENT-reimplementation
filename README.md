@@ -144,7 +144,7 @@ The table below uses the final values from `results.csv`.
 ## Results Comparison
 
 ### Original TENT Results
-The original TENT paper reports the following CIFAR-10-C error rates for `ResNet-26`:
+The original TENT paper reports the following CIFAR-10-C error rates for `WideResNet-28-10`:
 |                                                            | mean | gauss_noise | shot_noise | impulse_noise | defocus_blur | glass_blur | motion_blur | zoom_blur | snow | frost |  fog | brightness | contrast | elastic_trans | pixelate | jpeg |
 | ---------------------------------------------------------- | ---: | ----------: | ---------: | ------------: | -----------: | ---------: | ----------: | --------: | ---: | ----: | ---: | ---------: | -------: | ------------: | -------: | ---: |
 | source       | 43.5 |        72.3 |       65.7 |          72.9 |         46.9 |       54.3 |        34.8 |      42.0 | 25.1 |  41.3 | 26.0 |        9.3 |     46.7 |          26.6 |     58.5 | 30.3 |
